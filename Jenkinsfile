@@ -88,26 +88,26 @@ pipeline {
                 }        
             }
         }
-        // stage('Codedeploy Workload') {
-        //     steps {
-        //        echo "create Codedeploy group"   
-        //         sh '''
-        //             aws deploy create-deployment-group \
-        //             --application-name aws04-code-deploy \
-        //             --auto-scaling-groups aws04-asg \
-        //             --deployment-group-name aws04-code-deploy-${BUILD_NUMBER} \
-        //             --deployment-config-name CodeDeployDefault.OneAtATime \
-        //             --service-role-arn arn:aws:iam::257307634175:role/aws04-codedeploy-service-role
-        //             '''
-        //         echo "Codedeploy Workload"   
-        //         sh '''
-        //             aws deploy create-deployment --application-name aws04-code-deploy \
-        //             --deployment-config-name CodeDeployDefault.OneAtATime \
-        //             --deployment-group-name aws04-code-deploy-${BUILD_NUMBER} \
-        //             --s3-location bucket=aws04-codedeploy-bucket,bundleType=zip,key=deploy.zip
-        //             '''
-        //             sleep(10) // sleep 10s
-        //     }
-        // } 
+        stage('Codedeploy Workload') {
+            steps {
+               echo "create Codedeploy group"   
+                sh '''
+                    aws deploy create-deployment-group \
+                    --application-name aws04-code-deploy \
+                    --auto-scaling-groups aws04-asg \
+                    --deployment-group-name aws04-code-deploy-${BUILD_NUMBER} \
+                    --deployment-config-name CodeDeployDefault.OneAtATime \
+                    --service-role-arn arn:aws:iam::257307634175:role/aws04-codedeploy-service-role
+                    '''
+                echo "Codedeploy Workload"   
+                sh '''
+                    aws deploy create-deployment --application-name aws04-code-deploy \
+                    --deployment-config-name CodeDeployDefault.OneAtATime \
+                    --deployment-group-name aws04-code-deploy-${BUILD_NUMBER} \
+                    --s3-location bucket=aws04-codedeploy-bucket,bundleType=zip,key=deploy.zip
+                    '''
+                    sleep(10) // sleep 10s
+            }
+        } 
     }
 }
