@@ -68,26 +68,26 @@ pipeline {
                 }
             }
         }
-        // stage('Clean Up Docker Images on Jenkins Server') {
-        //     steps {
-        //         echo 'Cleaning up unused Docker images on Jenkins server'
+        stage('Clean Up Docker Images on Jenkins Server') {
+            steps {
+                echo 'Cleaning up unused Docker images on Jenkins server'
 
-        //         // Clean up unused Docker images, including those created within the last hour
-        //         sh "docker image prune -f --all --filter \"until=1h\""
-        //     }
-        // }
-        // stage('Upload to S3') {
-        //     steps {
-        //         echo "Upload to S3"
-        //         dir("${env.WORKSPACE}") {
-        //             sh 'zip -r deploy.zip ./deploy appspec.yml'
-        //             withAWS(region:"${REGION}", credentials:"${AWS_CREDENTIAL_NAME}"){
-        //               s3Upload(file:"deploy.zip", bucket:"aws04-codedeploy-bucket")
-        //             } 
-        //             sh 'rm -rf ./deploy.zip'                 
-        //         }        
-        //     }
-        // }
+                // Clean up unused Docker images, including those created within the last hour
+                sh "docker image prune -f --all --filter \"until=1h\""
+            }
+        }
+        stage('Upload to S3') {
+            steps {
+                echo "Upload to S3"
+                dir("${env.WORKSPACE}") {
+                    sh 'zip -r deploy.zip ./deploy appspec.yml'
+                    withAWS(region:"${REGION}", credentials:"${AWS_CREDENTIAL_NAME}"){
+                      s3Upload(file:"deploy.zip", bucket:"aws04-codedeploy-bucket")
+                    } 
+                    sh 'rm -rf ./deploy.zip'                 
+                }        
+            }
+        }
         // stage('Codedeploy Workload') {
         //     steps {
         //        echo "create Codedeploy group"   
